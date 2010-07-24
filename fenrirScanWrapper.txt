@@ -1,0 +1,146 @@
+fenrirScanWrapper.bat
+=====================
+
+fenrirでオフラインのHDDを検索するバッチファイル
+
+関連リンク
+==========
+
+窓の杜 - インデックス検索してファイルを開くキーワード入力型ランチャー「fenrir」
+http://www.forest.impress.co.jp/article/2005/04/14/fenrir.html
+
+おもな目的
+==========
+
+「接続されていないHDDのファイル名を検索したい」
+「フォルダやファイルの存在確認ができればそれでいい」
+「スキャン時に電源の入っていないHDDのパス情報を捨てたくない」
+
+インストール
+============
+
+fenrir.exeと同じフォルダにfenrirScanWrapper.batを置く
+
+実行例
+======
+
+1. fenrirScanWrapper
+   fenrirを終了したのちdataフォルダのpathを分割/結合する
+
+2. fenrirScanWrapper --restart
+   1.に加えてfenrirを再起動する
+
+3. fenrirScanWrapper --restart --scan
+   標準スキャンしたのち同上
+
+4. fenrirScanWrapper --restart --fenrir-scan
+   fenrirScan.exeでスキャンしたのち2.と同じ
+
+5. fenrirScanWrapper --restart --fenrir-scan --backup
+   スキャン前にpathをバックアップしたのち同上
+   --backupにはWinRarが必要
+
+6. fenrirScanWrapper --restart --fenrir-scan --backup --large
+   パス情報のサイズが増えていなければpathに反映しない
+
+instant.ini設定例
+=================
+
+/w=%W\fenrirScanWrapper.bat --scan --restart --pause --large %A
+/wo=%W\fenrirScanWrapper.bat --scan --restart --pause %A
+
+処理内容
+========
+
+fenrirでスキャンしたとき、外付けHDD等が接続されていなかったり
+HDDの電源が入っていないとそのデバイスは検索できなくなる。理由
+はdata\pathからパス情報が消えるため。このバッチを実行すると
+
+  1. スキャン
+  2. fenrir終了
+  3. pathの分割
+  4. pathの結合
+  5. fenrir起動
+
+が行われる。3.でpathから「COMPUTERNAME_path_D.txt」というファ
+イルが出力される(dataフォルダ)。これらの分割されたファイルは
+次回実行時にも結合されるので再スキャンしてもパス情報が引き継
+がれる。例え data\path からリムーバブルディスクのパス情報が消
+えてもパス情報が補完される。これによりスキャン時に電源が入っ
+ていないデバイスのファイル名やフォルダ名の検索が可能になる。
+
+■重要■ 仕様上「1ドライブレター = 1デバイス」での運用が必要。
+ドライブレターの固定は管理(compmgmt.msc)などで行う。
+
+起動オプション
+==============
+
+--scan
+開始時に標準スキャンを行う。/sがデフォルトのままでないと期待
+した動作にはならないので注意。
+
+--fenrir-scan
+開始時にfenrirScanでスキャンを行う。--scanとは排他。スキャン
+したい場合はどちらか一方を使う。個人的にはfenrirScan推奨。
+
+--restart
+終了時にfenrirを再起動する。普段からfenrirを常駐させている場
+合はおそらく必須のオプション。
+
+--pause
+終了時に一時停止する。ダブルクリックやタスクスケジューラなど、
+コマンドプロンプト以外から起動する場合で、動作状況やログを見
+たい場合などに使う。
+
+--large
+パス情報量の多いデバイスを優先する。ドライブレターが衝突した
+際に、パス情報量が多いデバイスを優先してpathに反映する。例え
+ば「E:ドライブにHDDとSDカードが割り当てられてしまい、元々あっ
+たHDD E:のパス情報がSDカードE:で上書きされてしまった」いうよ
+うな意図しない反映を防ぐ。ドライブレターとストレージが1対1で
+対応していればこの問題は発生しない。おそらく最初からこのオプ
+ションを指定すべきではない。問題が発生したときに初めてこのオ
+プションを使うか検討すべき。パス情報量が減ったとき最新の状態
+が反映されないという副作用がある。常にスキャンの結果を反映さ
+せたいのならこのオプションは必要ない。
+
+--backup
+pathをpath-YYYY-MM-DD-HH-MM.rarにバックアップする。WinRarがイ
+ンストールされていなければ何もしない。バックアップするタイミ
+ングはスキャンする直前。最新8個を残して古いrarは自動的に削除
+される。
+
+バッチ内部の変数について
+========================
+
+DriveLetters
+デバイスが普段使うドライブレターのリスト。ここに書いたドライ
+ブレターがパス情報保存の対象になる。aからzまでスペース区切り
+で書いておけば間違いない。かといって全部書くのは無駄なのでiく
+らいまで列挙しておけば普通は十分だと思われる。正確には「path
+にたいしてfindstrする時の先頭一致させるためのアルファベットリ
+スト」。
+
+fixedDriveLetters
+「--large」オプションが指定されていても必ずpathに反映させるド
+ライブレターのリスト。デフォルトではcドライブは必ず反映させる。
+リムーバブルディスクではなく固定ディスクのドライブレターがあ
+らかじめわかっていて、「--large」オプションを頻繁に使うのなら
+ばここに列挙しておくのが望ましい。
+
+NExpire
+「--backup」オプション使用時に残すrarファイルの個数。
+
+著作権
+======
+
+fenrirScanWrapperはフリーソフトウェアです。特に言及される場合
+を除き、Perlと同じ条件において再配布および修正が可能です。
+
+Except where otherwise noted, goopos is free software; you
+can redistribute it and/or modify it under the same terms as
+Perl itself.
+
+mofigan@gmail.com
+
+以上
