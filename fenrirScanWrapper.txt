@@ -1,9 +1,9 @@
 fenrirScanWrapper.bat
 =====================
 
-fenrir�ŃI�t���C����HDD���������邽�߂̃o�b�`�t�@�C��
+fenrirでオフラインのHDDを検索するためのバッチファイル
 
-�֘A�����N
+関連リンク
 ==========
 
 B@r09u3 StyleOp.2
@@ -12,152 +12,152 @@ http://hp.vector.co.jp/authors/VA026310/
 fenrir - FrownWiki
 http://fw.ampll.org/index.php?fenrir
 
-���̓m - �C���f�b�N�X�������ăt�@�C�����J���L�[���[�h���͌^�����`���[�ufenrir�v
+窓の杜 - インデックス検索してファイルを開くキーワード入力型ランチャー「fenrir」
 http://www.forest.impress.co.jp/article/2005/04/14/fenrir.html
 
-�����ȖړI
+おもな目的
 ==========
 
-�E�ڑ�����Ă��Ȃ�HDD�̃t�@�C����������������
-�E�t�H���_��t�@�C���̑��݊m�F���ł���΂���ł���
-�E�d���̓����Ă��Ȃ�HDD�̃p�X�����X�L�����Ŏ̂Ă����Ȃ�
+・接続されていないHDDのファイル名を検索したい
+・フォルダやファイルの存在確認ができればそれでいい
+・電源の入っていないHDDのパス情報をスキャンで捨てたくない
 
-�C���X�g�[��
+インストール
 ============
 
-fenrir.exe�Ɠ����t�H���_��fenrirScanWrapper.bat��u���ĉ�����
+fenrir.exeと同じフォルダにfenrirScanWrapper.batを置いて下さい
 
-�Ȃɂ�����o�b�`�t�@�C���Ȃ̂�
+なにをするバッチファイルなのか
 ==============================
 
-�^�X�N�g���C��fenrir���E�N���b�N���āuScan�v����ƁA�O�tHDD��
-���ڑ�����Ă��Ȃ�������HDD�̓d���������Ă��Ȃ��Ƃ��̃f�o�C�X
-�̃t�@�C�����͌����ł��Ȃ��Ȃ�܂��B���R�� data\path ����p�X
-��񂪏����邽�߂ł��B���̃o�b�`�����s�����
+タスクトレイのfenrirを右クリックして「Scan」すると、外付HDD等
+が接続されていなかったりHDDの電源が入っていないとそのデバイス
+のファイル名は検索できなくなります。理由は data\path からパス
+情報が消えるためです。このバッチを実行すると
 
-  1. �X�L����
-  2. fenrir�I��
-  3. path�̕���
-  4. path�̌���
-  5. fenrir�N��
+  1. スキャン
+  2. fenrir終了
+  3. pathの分割
+  4. pathの結合
+  5. fenrir起動
 
-���s���܂��Bpath���h���C�u���^�[���Ƃ̃t�@�C���ɕ����E�ۑ�
-���āA�������邱�Ƃɂ���Ă��ׂẴp�X�����܂�path�𐶐�
-���܂��B
+が行われます。pathをドライブレターごとのファイルに分割・保存
+して、結合することによってすべてのパス情報を含んだpathを生成
+します。
 
-��̓I�ɂ�path����uCOMPUTERNAME_path_D.txt�v�Ƃ����t�@�C����
-�����o�͂���܂��B�����̃t�@�C���͎�����s���ɂ����������
-�̂ŁA�ăX�L�������Ă��p�X��񂪈����p����܂��B�Ⴆ�� path
-���烊���[�o�u���f�B�X�N�̃p�X��񂪏����Ă��A�p�X��񂪕⊮
-����܂��B����ɂ��d���������Ă��Ȃ��f�o�C�X�̃t�@�C������
-�t�H���_���̌������\�ɂȂ�܂��B
+具体的にはpathから「COMPUTERNAME_path_D.txt」というファイルが
+分割出力されます。これらのファイルは次回実行時にも結合される
+ので、再スキャンしてもパス情報が引き継がれます。例えば path
+からリムーバブルディスクのパス情報が消えても、パス情報が補完
+されます。これにより電源が入っていないデバイスのファイル名や
+フォルダ名の検索が可能になります。
 
-���d�v�� �d�l��u1�h���C�u���^�[ = 1�f�o�C�X�v�ł̉^�p���K�v
-�ƂȂ�܂��B�h���C�u���^�[�̌Œ�̓R���s���[�^�̊Ǘ��Ȃǂōs
-���܂�(compmgmt.msc)�B
+■重要■ 仕様上「1ドライブレター = 1デバイス」での運用が必要
+となります。ドライブレターの固定はコンピュータの管理などで行
+います(compmgmt.msc)。
 
-���s��
+実行例
 ======
 
 1. fenrirScanWrapper
-   fenrir���I�������̂�data�t�H���_��path�𕪊�/��������
+   fenrirを終了したのちdataフォルダのpathを分割/結合する
 
 2. fenrirScanWrapper --restart
-   1.�ɉ�����fenrir���ċN������
+   1.に加えてfenrirを再起動する
 
 3. fenrirScanWrapper --restart --scan
-   �W���X�L���������̂�����
+   標準スキャンしたのち同上
 
 4. fenrirScanWrapper --restart --fenrir-scan
-   fenrirScan.exe�ŃX�L���������̂�2.�Ɠ���
+   fenrirScan.exeでスキャンしたのち2.と同じ
 
 5. fenrirScanWrapper --restart --fenrir-scan --backup
-   �X�L�����O��path���o�b�N�A�b�v�����̂�����
-   --backup�ɂ�WinRar���K�v
+   スキャン前にpathをバックアップしたのち同上
+   --backupにはWinRarが必要
 
 6. fenrirScanWrapper --restart --fenrir-scan --backup --large
-   �p�X���̃T�C�Y�������Ă��Ȃ����path�ɔ��f���Ȃ�
+   パス情報のサイズが増えていなければpathに反映しない
 
-instant.ini�ݒ��
+instant.ini設定例
 =================
 
 /w=%W\fenrirScanWrapper.bat --scan --restart --pause --large %A
 /wo=%W\fenrirScanWrapper.bat --scan --restart --pause %A
 
-�N���I�v�V����
+起動オプション
 ==============
 
 --scan
 
-�J�n���ɕW���X�L�������s���܂��B
+開始時に標準スキャンを行います。
 
 --fenrir-scan
 
-�J�n����fenrirScan.exe�ŃX�L�������s���܂��B--scan�Ƃ͔r����
-���B�X�L�����������ꍇ�͂ǂ��炩������g���܂��B�l�I�ɂ�
-fenrirScan.exe�𐄏����܂��B
+開始時にfenrirScan.exeでスキャンを行います。--scanとは排他で
+す。スキャンしたい場合はどちらか一方を使います。個人的には
+fenrirScan.exeを推奨します。
 
 --restart
 
-�I������fenrir���ċN�����܂��B���i����fenrir���풓�����Ă���
-�ꍇ�͂����炭�K�{�̃I�v�V�����ł��B
+終了時にfenrirを再起動します。普段からfenrirを常駐させている
+場合はおそらく必須のオプションです。
 
 --pause
 
-�I�����Ɉꎞ��~���܂��B�_�u���N���b�N��^�X�N�X�P�W���[����
-�ǁA�R�}���h�v�����v�g�ȊO����N������ꍇ�ŁA����󋵂⃍�O
-���������ꍇ�ȂǂɎg���܂��B
+終了時に一時停止します。ダブルクリックやタスクスケジューラな
+ど、コマンドプロンプト以外から起動する場合で、動作状況やログ
+を見たい場合などに使います。
 
 --large
 
-�p�X���ʂ̑����f�o�C�X��D�悵�܂��B��̓I�ɂ̓h���C�u���^�[
-���Փ˂����ۂɁA�p�X���ʂ������f�o�C�X��D�悵��path�ɔ��f
-���܂��B�Ⴆ�΁uE:�h���C�u��HDD��SD�J�[�h�����蓖�Ă��Ă���
-���A���X������HDD E:�̃p�X���SD�J�[�hE:�ŏ㏑������Ă��܂�
-���v�����悤�ȈӐ}���Ȃ����f��h���܂��B
+パス情報量の多いデバイスを優先します。具体的にはドライブレター
+が衝突した際に、パス情報量が多いデバイスを優先してpathに反映
+します。例えば「E:ドライブにHDDとSDカードが割り当てられてしま
+い、元々あったHDD E:のパス情報がSDカードE:で上書きされてしまっ
+た」いうような意図しない反映を防ぎます。
 
-�h���C�u���^�[�ƃX�g���[�W��1��1�őΉ����Ă���΂��̖��͔�
-�����܂���B�����炭�ŏ����炱�̃I�v�V�������w�肷�ׂ��ł͂�
-��܂���B��肪���������Ƃ��ɏ��߂Ă��̃I�v�V�������g������
-�����ׂ��ł��B�p�X���ʂ��������Ƃ��A�ŐV�̏�Ԃ����f�����
-���Ƃ�������p������܂��B��ɃX�L�����̌��ʂ𔽉f����������
-�Ȃ炱�̃I�v�V�����͕K�v����܂���B
+ドライブレターとストレージが1対1で対応していればこの問題は発
+生しません。おそらく最初からこのオプションを指定すべきではあ
+りません。問題が発生したときに初めてこのオプションを使うか検
+討すべきです。パス情報量が減ったとき、最新の状態が反映されな
+いという副作用があります。常にスキャンの結果を反映させたいの
+ならこのオプションは必要ありません。
 
 --backup
 
-���s�O��path��path-YYYY-MM-DD-HH-MM.rar�Ƀo�b�N�A�b�v���܂��B
-WinRar���C���X�g�[������Ă��Ȃ���Ή������܂���B�ŐV8���c
-���ČÂ�rar�͎����I�ɍ폜����܂��B
+実行前にpathをpath-YYYY-MM-DD-HH-MM.rarにバックアップします。
+WinRarがインストールされていなければ何もしません。最新8個を残
+して古いrarは自動的に削除されます。
 
-�o�b�`�����̕ϐ��ɂ���
+バッチ内部の変数について
 ========================
 
 DriveLetters
 
-�f�o�C�X�����i�g���h���C�u���^�[�̃��X�g�B�����ɏ������h���C
-�u���^�[���p�X���ۑ��̑ΏۂɂȂ�܂��Ba����z�܂ŃX�y�[�X��
-�؂�ŏ����Ă����ΊԈႢ����܂���B���Ƃ����đS�������͖̂�
-�ʂȂ̂�i���炢�܂ŗ񋓂��Ă����Ε��ʂ͏\�����Ǝv���܂��B��
-�m�ɂ́upath�ɂ�������findstr���鎞�̐擪��v�����邽�߂̃A��
-�t�@�x�b�g���X�g�v�B
+デバイスが普段使うドライブレターのリスト。ここに書いたドライ
+ブレターがパス情報保存の対象になります。aからzまでスペース区
+切りで書いておけば間違いありません。かといって全部書くのは無
+駄なのでiくらいまで列挙しておけば普通は十分だと思われます。正
+確には「pathにたいしてfindstrする時の先頭一致させるためのアル
+ファベットリスト」。
 
 fixedDriveLetters
 
-�u--large�v�I�v�V�������w�肳��Ă��Ă��K��path�ɔ��f������h
-���C�u���^�[�̃��X�g�B�f�t�H���g��c�h���C�u�͕K�����f�����܂��B
-�Œ�f�B�X�N�̃h���C�u���^�[�����炩���߂킩���Ă���--large�I
-�v�V������p�ɂɎg���̂Ȃ�΂����ɗ񋓂��Ă����̂��]�܂�����
-���傤�B
+「--large」オプションが指定されていても必ずpathに反映させるド
+ライブレターのリスト。デフォルトはcドライブは必ず反映させます。
+固定ディスクのドライブレターがあらかじめわかっていて--largeオ
+プションを頻繁に使うのならばここに列挙しておくのが望ましいで
+しょう。
 
 NExpire
 
-�u--backup�v�I�v�V�����g�p���Ɏc��rar�t�@�C���̌��B
+「--backup」オプション使用時に残すrarファイルの個数。
 
-���쌠
+著作権
 ======
 
-fenrirScanWrapper�̓t���[�\�t�g�E�F�A�ł��B���Ɍ��y�����ꍇ
-�������APerl�Ɠ��������ɂ����čĔz�z����яC�����\�ł��B
+fenrirScanWrapperはフリーソフトウェアです。特に言及される場合
+を除き、Perlと同じ条件において再配布および修正が可能です。
 
 Except where otherwise noted, goopos is free software; you
 can redistribute it and/or modify it under the same terms as
@@ -165,4 +165,4 @@ Perl itself.
 
 mofigan@gmail.com
 
-�ȏ�
+以上
