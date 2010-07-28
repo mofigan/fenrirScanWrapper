@@ -15,6 +15,7 @@ set EnablePause=no
 set EnableLargeMode=no
 set EnableBackup=no
 set EnableExpire=no
+set MyVersion=0.2.1
 
 :sub_main
   set MyName=%0
